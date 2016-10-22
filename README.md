@@ -1,9 +1,9 @@
 About this Repo
 ===============
 
-This is a fork of the official Docker image git repo for [Odoo](https://registry.hub.docker.com/_/odoo/).
+This is a fork of the official Docker image git repo for [hibou/odoo](https://hub.docker.com/r/hibou/odoo/).
 
-This repo is automatically built on Docker Hub as [hibou/odoo](https://hub.docker.com/r/hibou/odoo/).
+This repo is automatically built on Docker Hub as [qubiq/odoo-docker](https://hub.docker.com/r/qubiq/odoo-docker/).
 
 Goals
 =====
@@ -15,3 +15,4 @@ Goals
 * Provide optional Python packages to enable missing Odoo features (flanker email validation, workers>0 support)
 * Provide newer Postgres bindings to support backing up on Postgres > 9.4
 * Provide a better developer and benchmarking suite (newrelic and watchdog)sourcetree
+* Provide addintional custom addon mount point
