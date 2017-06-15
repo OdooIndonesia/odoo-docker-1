@@ -39,7 +39,7 @@ RUN apt-get purge -y python.*
 
 # Install Odoo
 ENV ODOO_VERSION 9.0
-ENV ODOO_RELEASE 20160726
+ENV ODOO_RELEASE latest
 RUN set -x; \
         apt-get install -y libsasl2-dev libldap2-dev libssl-dev gcc \
         && curl -o odoo.tar.gz -SL https://nightly.odoo.com/${ODOO_VERSION}/nightly/src/odoo_${ODOO_VERSION}c.${ODOO_RELEASE}.tar.gz \
@@ -78,7 +78,7 @@ RUN chown odoo /etc/odoo/openerp-server.conf
 
 RUN mkdir -p /mnt/custom-addons \
      && chown -R odoo /mnt/custom-addons
-     
+
 RUN mkdir -p /mnt/extra-addons \
         && chown -R odoo /mnt/extra-addons
 VOLUME ["/var/lib/odoo", "/mnt/extra-addons","/mnt/custom-addons"]

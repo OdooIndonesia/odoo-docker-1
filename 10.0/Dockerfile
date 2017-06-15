@@ -39,7 +39,7 @@ RUN apt-get purge -y python.*
 
 # Install Odoo
 ENV ODOO_VERSION 10.0
-ENV ODOO_RELEASE 20161011
+ENV ODOO_RELEASE latest
 RUN set -x; \
         apt-get install -y libsasl2-dev libldap2-dev libssl-dev gcc \
         && curl -o odoo.tar.gz -SL https://nightly.odoo.com/${ODOO_VERSION}/nightly/src/odoo_${ODOO_VERSION}.${ODOO_RELEASE}.tar.gz \
@@ -73,7 +73,7 @@ RUN chown odoo /etc/odoo/odoo.conf
 
 RUN mkdir -p /mnt/custom-addons \
      && chown -R odoo /mnt/custom-addons
-     
+
 RUN mkdir -p /mnt/extra-addons \
         && chown -R odoo /mnt/extra-addons
 VOLUME ["/var/lib/odoo", "/mnt/extra-addons","/mnt/custom-addons"]
