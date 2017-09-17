@@ -44,7 +44,7 @@ RUN set -x; \
         apt-get install -y libsasl2-dev libldap2-dev libssl-dev gcc \
         && curl -o odoo.tar.gz -SL https://nightly.odoo.com/${ODOO_VERSION}/nightly/src/odoo_${ODOO_VERSION}.${ODOO_RELEASE}.tar.gz \
         && tar xzf odoo.tar.gz \
-        && cd odoo-${ODOO_VERSION}-${ODOO_RELEASE} \
+        && cd odoo-* \
         && pip install . \
         && cd .. && rm -rf ./odoo* \
         && pip install --upgrade \
