@@ -18,6 +18,13 @@ RUN set -x; \
         && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
         && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
 
+# Special case for wkhtmltox - Tecnativa
+#RUN curl -SLo wkhtmltox.tar.xz https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox-${WKHTMLTOPDF_VERSION}_linux-generic-amd64.tar.xz \
+#    && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.tar.xz" | sha256sum -c - \
+#    && tar --strip-components 1 -C /usr/local/ -xf wkhtmltox.tar.xz \
+#    && rm wkhtmltox.tar.xz \
+#    && wkhtmltopdf --version
+
 # support for Postgresql9.5
 RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main 9.6" > /etc/apt/sources.list.d/postgresql.list \
         && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
@@ -44,7 +51,7 @@ RUN set -x; \
         apt-get install -y libsasl2-dev libldap2-dev libssl-dev gcc \
         && curl -o odoo.tar.gz -SL https://nightly.odoo.com/${ODOO_VERSION}/nightly/src/odoo_${ODOO_VERSION}.${ODOO_RELEASE}.tar.gz \
         && tar xzf odoo.tar.gz \
-        && cd odoo-${ODOO_VERSION}-${ODOO_RELEASE} \
+        && cd odoo-* \
         && pip install . \
         && cd .. && rm -rf ./odoo* \
         && pip install --upgrade \
@@ -57,6 +64,10 @@ RUN set -x; \
             pyinotify \
             newrelic \
             flanker \
+            pdb \
+            pudb \
+            wdb \
+            ptvsd==3.0.0 \
         && apt-get purge -y \
             gcc \
             libsasl2-dev \
@@ -83,7 +94,17 @@ VOLUME ["/var/lib/odoo", "/mnt/extra-addons","/mnt/custom-addons"]
 EXPOSE 8069 8071
 
 # Set the default config file - NOTE this is still used in odoo/tools/config.py in v10
-ENV OPENERP_SERVER /etc/odoo/odoo.conf
+ENV OPENERP_SERVER /etc/odoo/odoo.conf \
+ # Postgres
+    WAIT_DB=true \
+    # PuDB debugger
+    PUDB_RDB_HOST=0.0.0.0 \
+    PUDB_RDB_PORT=6899 \
+    # WDB debugger
+    WDB_NO_BROWSER_AUTO_OPEN=True \
+    WDB_SOCKET_SERVER=wdb \
+    WDB_WEB_PORT=1984 \
+    WDB_WEB_SERVER=localhost
 
 # Set default user when running the container
 USER odoo
