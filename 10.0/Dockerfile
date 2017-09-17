@@ -1,6 +1,7 @@
 FROM python:2.7.12
 MAINTAINER Hibou Corp. <hello@hibou.io>
 
+# Instal·lació Odoo 10 . Latest
 # add user with the same user id as in core odoo package
 # unfortunately python comes with group 107 already defined so I used www-data as group
 RUN useradd -m -d /var/lib/odoo -s /bin/false -u 104 -g 33 odoo
