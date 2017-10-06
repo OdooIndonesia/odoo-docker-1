@@ -46,7 +46,7 @@ RUN npm install -g less \
 RUN apt-get purge -y python.*
 
 # Install Odoo
-ENV ODOO_VERSION master
+ENV ODOO_VERSION 11.0
 ENV ODOO_RELEASE latest
 RUN set -x; \
         apt-get install -y libsasl2-dev libldap2-dev libssl-dev gcc \
