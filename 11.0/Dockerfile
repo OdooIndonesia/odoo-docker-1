@@ -50,7 +50,7 @@ ENV ODOO_VERSION 11.0
 ENV ODOO_RELEASE latest
 RUN set -x; \
         apt-get install -y libsasl2-dev libldap2-dev libssl-dev gcc \
-        && curl -o odoo.tar.gz -SL https://nightly.odoo.com/${ODOO_VERSION}/nightly/src/odoo_11.0alpha1.latest.tar.gz  \
+        && curl -o odoo.tar.gz -SL https://nightly.odoo.com/${ODOO_VERSION}/nightly/src/odoo_11.0.latest.tar.gz  \
         && tar xzf odoo.tar.gz \
         && cd odoo* \
         && pip install . \
