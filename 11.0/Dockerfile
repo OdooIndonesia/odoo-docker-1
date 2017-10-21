@@ -1,4 +1,4 @@
-FROM python:2.7.12
+FROM debian:stretch
 MAINTAINER Hibou Corp. <hello@hibou.io>
 
 # Instal·lació Odoo 10 . Latest
@@ -12,35 +12,19 @@ RUN set -x; \
         && apt-get install -y --no-install-recommends \
             ca-certificates \
             curl \
-        && curl -o wkhtmltox.deb -SL http://nightly.odoo.com/extra/wkhtmltox-0.12.1.2_linux-jessie-amd64.deb \
-        && echo '40e8b906de658a2221b15e4e8cd82565a47d7ee8 wkhtmltox.deb' | sha1sum -c - \
-        && dpkg --force-depends -i wkhtmltox.deb \
-        && apt-get -y install -f --no-install-recommends \
-        && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false npm \
-        && rm -rf /var/lib/apt/lists/* wkhtmltox.deb
+            node-less \
+            python3-pip \
+            python3-setuptools \
+            python3-renderpm \
+            libssl1.0-dev \
+            xz-utils \
+        && curl -o wkhtmltox.tar.xz -SL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz \
+        && echo '3f923f425d345940089e44c1466f6408b9619562 wkhtmltox.tar.xz' | sha1sum -c - \
+        && tar xvf wkhtmltox.tar.xz \
+        && cp wkhtmltox/lib/* /usr/local/lib/ \
+        && cp wkhtmltox/bin/* /usr/local/bin/ \
+        && cp -r wkhtmltox/share/man/man1 /usr/local/share/man/
 
-# Special case for wkhtmltox - Tecnativa
-#RUN curl -SLo wkhtmltox.tar.xz https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/${WKHTMLTOPDF_VERSION}/wkhtmltox-${WKHTMLTOPDF_VERSION}_linux-generic-amd64.tar.xz \
-#    && echo "${WKHTMLTOPDF_CHECKSUM}  wkhtmltox.tar.xz" | sha256sum -c - \
-#    && tar --strip-components 1 -C /usr/local/ -xf wkhtmltox.tar.xz \
-#    && rm wkhtmltox.tar.xz \
-#    && wkhtmltopdf --version
-
-# support for Postgresql9.5
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main 9.6" > /etc/apt/sources.list.d/postgresql.list \
-        && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - \
-        && apt-get update \
-        && apt-get upgrade -y postgresql-common \
-        && apt-get upgrade -y postgresql-client
-
-# install newer node and lessc (mostly for less compatibility)
-RUN set -x; \
-        apt-get install -y nodejs npm
-
-RUN npm install -g less \
-    && npm install -g less-plugin-clean-css \
-    && ln -s `which nodejs` /bin/node \
-    && ln -s `which lessc` /bin/lessc
 
 # python python-minimal python2.7 python2.7-minimal
 RUN apt-get purge -y python.*
@@ -49,31 +33,15 @@ RUN apt-get purge -y python.*
 ENV ODOO_VERSION 11.0
 ENV ODOO_RELEASE latest
 RUN set -x; \
-        apt-get install -y libsasl2-dev libldap2-dev libssl-dev gcc \
+        apt-get install -y libsasl2-dev libldap2-dev libssl-dev gcc python3  python3-pip \
         && curl -o odoo.tar.gz -SL https://nightly.odoo.com/${ODOO_VERSION}/nightly/src/odoo_11.0.latest.tar.gz  \
         && tar xzf odoo.tar.gz \
         && cd odoo* \
-        && pip install . \
+        && pip3 install . \
         && cd .. && rm -rf ./odoo* \
-        && pip install --upgrade \
-            cryptography \
-            inotify \
-            watchdog \
-            psycogreen \
-            psycopg2 \
-            gevent \
-            pyinotify \
-            newrelic \
-            flanker \
-            pdb \
-            pudb \
-            wdb \
-            ptvsd==3.0.0 \
-        && apt-get purge -y \
-            gcc \
-            libsasl2-dev \
-            libldap2-dev \
-            libssl-dev
+        && apt-get install wget git bzr  gdebi-core  -y
+
+
 
 
 # Copy entrypoint script and Odoo configuration file
