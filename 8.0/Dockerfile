@@ -90,7 +90,17 @@ VOLUME ["/var/lib/odoo", "/mnt/extra-addons","/mnt/custom-addons"]
 EXPOSE 8069 8071
 
 # Set the default config file
-ENV OPENERP_SERVER /etc/odoo/openerp-server.conf
+ENV OPENERP_SERVER /etc/odoo/openerp-server.conf \
+ WAIT_DB=true \
+    # PuDB debugger
+    PUDB_RDB_HOST=0.0.0.0 \
+    PUDB_RDB_PORT=6899 \
+    # WDB debugger
+    WDB_NO_BROWSER_AUTO_OPEN=True \
+    WDB_SOCKET_SERVER=wdb \
+    WDB_WEB_PORT=1984 \
+    WDB_WEB_SERVER=localhost
+
 
 # Set default user when running the container
 USER odoo
