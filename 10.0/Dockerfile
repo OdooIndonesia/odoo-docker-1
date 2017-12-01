@@ -65,7 +65,6 @@ RUN set -x; \
             pyinotify \
             newrelic \
             flanker \
-            pdb \
             pudb \
             wdb \
             ptvsd==3.0.0 \
