@@ -7,6 +7,8 @@ This repo is automatically built on Docker Hub as [qubiq/odoo-docker](https://hu
 
 Additional information and command line options can be found at [Odoo](https://hub.docker.com/_/odoo/)
 
+Update date: 2018-03-03
+
 Goals
 =====
 
